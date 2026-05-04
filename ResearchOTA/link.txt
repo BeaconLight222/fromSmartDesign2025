@@ -1,0 +1,3 @@
+https://forum.amebaiot.com/t/rtl8720dn-ota-update/380
+https://scream.blog.csdn.net/article/details/133453185
+https://forum.amebaiot.com/t/which-protocol-to-update-firmware-for-bw16-by-mcu/1600

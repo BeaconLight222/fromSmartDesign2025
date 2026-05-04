@@ -1,0 +1,33 @@
+ARDUINO_DIR = /Users/deqinguser/Library/Arduino15/packages/realtek/hardware/AmebaD/3.1.7
+TOOLS_DIR = /Users/deqinguser/Library/Arduino15/packages/realtek/tools
+
+GCC_PREFIX = $(TOOLS_DIR)/ameba_d_asdk_toolchain/1.0.1/bin/arm-none-eabi-
+GCC = $(GCC_PREFIX)gcc
+
+CSRC = $(ARDUINO_DIR)/system/component/soc/realtek/amebad/fwlib/usrcfg/rtl8721d_bootcfg.c
+CSRC += $(ARDUINO_DIR)/system/component/soc/realtek/amebad/fwlib/ram_common/rtl8721d_wdg.c
+CSRC += $(ARDUINO_DIR)/system/component/soc/realtek/amebad/fwlib/ram_lp/rtl8721dlp_clk.c
+
+INCLUDE_DIR = $(ARDUINO_DIR)/system/component/soc/realtek/amebad/fwlib/include
+INCLUDE_DIR += $(ARDUINO_DIR)/system/project/realtek_amebaD_va0_example/inc/inc_lp
+INCLUDE_DIR += $(ARDUINO_DIR)/system/component/soc/realtek/amebad/swlib/string
+INCLUDE_DIR += $(ARDUINO_DIR)/system/component/soc/realtek/amebad/app/monitor/include
+INCLUDE_DIR += $(ARDUINO_DIR)/system/component/soc/realtek/amebad/app/xmodem/
+INCLUDE_DIR += $(ARDUINO_DIR)/system/component/soc/realtek/amebad/cmsis
+INCLUDE_DIR += $(ARDUINO_DIR)/system/component/common/network/ssl/mbedtls-2.4.0/include
+INCLUDE_DIR += $(ARDUINO_DIR)/system/component/common/network/ssl/ssl_ram_map/rom
+INCLUDE_DIR += $(ARDUINO_DIR)/system/component/common/api/platform
+INCLUDE_DIR += $(ARDUINO_DIR)/system/component/soc/realtek/amebad/misc
+INCLUDE_DIR += $(ARDUINO_DIR)/system/component/os/freertos
+INCLUDE_DIR += $(ARDUINO_DIR)/system/component/os/freertos/freertos_v10.2.0/Source/include
+INCLUDE_DIR += $(ARDUINO_DIR)/system/component/os/freertos/freertos_v10.2.0/Source/portable/GCC/RTL8721D_LP
+
+
+INCLUDE_FLAGS = $(foreach dir,$(INCLUDE_DIR),-I$(dir))
+
+OBJ = $(CSRC:.c=.o)
+
+%.o: %.c
+	$(GCC) -Os -g  -march=armv8-m.base  -mthumb  -save-temps -D__ARM_FEATURE_DSP=0 -gdwarf-3 -fstack-usage -fdata-sections -ffunction-sections -nostartfiles -nostdlib -Wall -Wpointer-arith -Wstrict-prototypes -Wundef -Wno-write-strings -Wno-maybe-uninitialized --save-temps -c -MMD -MP -fno-jump-tables  -Wextra -DCONFIG_PLATFORM_8721D $(INCLUDE_FLAGS) -c $< -o $@
+
+all: $(OBJ)
